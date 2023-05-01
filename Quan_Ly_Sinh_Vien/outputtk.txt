@@ -1,0 +1,28 @@
+			Tong so sinh vien: 7
+
+
+			Highest: 
+Nguyen Thi Thu | 9924 | 10 | lg
+
+
+			Lowest: 
+Le Thi Thao Nhi | 8532 | 3.8 | nn
+
+			Hoc luc: 
++ Tot: 42.9 %
++ Kha: 14.3 %
++ Yeu: 42.9 %
+
+Cac sinh vien dat: 
++ Khi Ca Mau	: 6.0
++ Nguyen Thi Thu	: 10.0
++ Nguyen Van Minh Quan	: 9.6
++ Bui Van Khanh	: 8.5
++ Ho Thi Hong Phuong	: 6.6
+=> Ti le: 71.4 %
+
+
+Cac sinh vien thi lai: 
++ Ly Quoc Tuan	: 4.3
++ Le Thi Thao Nhi	: 3.8
+=> Ti le: 28.6 %

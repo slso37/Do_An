@@ -1,0 +1,10 @@
+			Thong tin: 
+Name			| ID			| Diem			| Monhoc 
+
+Khi Ca Mau		 | 8752		 | 6		 | it
+Nguyen Thi Thu		 | 9924		 | 10		 | lg
+Nguyen Van Minh Quan		 | 3721		 | 9.6		 | it
+Bui Van Khanh		 | 9832		 | 8.5		 | kt
+Ly Quoc Tuan		 | 8943		 | 4.3		 | qt
+Le Thi Thao Nhi		 | 8532		 | 3.8		 | nn
+Ho Thi Hong Nhung		 | 1274		 | 6.6		 | nn
