@@ -6,7 +6,6 @@
 
 using namespace std;
 
-enum GIOI_TINH {Nam, Nu};
 int choice = 0;
 ofstream fileOut;
 
@@ -19,30 +18,27 @@ class Con_Nguoi{
         char Chu_Cai_Cuoi(){
            return Name[Name.rfind(" ")+1];
         }
+        int Tuoi(){
+            return Age;
+        }
+        int GT(){
+            return Sex % 2;
+        }
+        string Ten(){
+            return Name;
+        }
         virtual void NhapThongTin(){
             cout << "Nhap Ten: ";       getline(cin, Name);
-            cout << "Nhap GT: "; cin >> Sex;
+            cout << "Nhap GT: ";        cin >> Sex;
             cout << "Nhap Tuoi: ";      cin >> Age;
             cin.ignore();
         }
         virtual void XuatThongTin(){
-            cout << left << setw(5) << "Ten: ";    cout << left << setw(20) << Name;
-            cout << left << setw(3) << "GT: ";     cout << left << setw(7) << Sex;
-            cout << left << setw(6) << "Tuoi: ";   cout << left << setw(7) << Age;
-        }
-        void Sao_Luu_Thong_Tin_Nguoi_Lon(){
-            fileOut.open("DSNL.txt",ios_base::trunc);
-            fileOut << Name << ", ";
-            fileOut << Sex << ", ";
-            fileOut << Age << ", ";
-        }
+            string Gender = (Sex % 2 == 0) ? "Nam" : "Nu";
 
-       // FIXME: loi ko sync dc file
-        void Sao_Luu_Thong_Tin_Tre_Em(){
-            fileOut.open("DSTE.txt",ios_base::trunc);
-            fileOut << Name << ", ";
-            fileOut << Sex << ", ";
-            fileOut << Age << ", ";
+            cout << left << setw(5) << "Ten: ";    cout << left << setw(20) << Name;
+            cout << left << setw(3) << "GT: ";     cout << left << setw(7) << Gender;
+            cout << left << setw(6) << "Tuoi: ";   cout << left << setw(7) << Age;
         }
         
 };
@@ -53,8 +49,17 @@ class Nguoi_Lon : public Con_Nguoi{
         char Chu_Cai_Cuoi(){
            return Con_Nguoi::Chu_Cai_Cuoi();
         }
-        string So_CMND(){
+        int Tuoi(){
+            return Con_Nguoi::Tuoi();
+        }
+        int GT(){
+            return Con_Nguoi::GT();
+        }
+        string cmnd(){
             return CMND;
+        }
+        string Ten(){
+            return Con_Nguoi::Ten();
         }
         void NhapThongTin(){
             Con_Nguoi::NhapThongTin();
@@ -62,16 +67,7 @@ class Nguoi_Lon : public Con_Nguoi{
         }
         void XuatThongTin(){
             Con_Nguoi::XuatThongTin();
-            cout << left << setw(7) << "CMND: ";   cout <<left << setw(20) << CMND << endl;
-        }
-        // FIXME: loi ko sync dc file
-        void Sao_Luu_Thong_Tin(){
-            Sao_Luu_Thong_Tin_Nguoi_Lon();
-
-            fileOut.open("DSNL.txt",ios_base::app);
-            fileOut << CMND << endl << endl;
-
-            fileOut.close();
+            cout << left << setw(6) << "CMND: ";   cout <<left << setw(20) << CMND << endl;
         }
 };
 class Tre_Em : public Con_Nguoi{
@@ -81,8 +77,17 @@ class Tre_Em : public Con_Nguoi{
         char Chu_Cai_Cuoi(){
            return Con_Nguoi::Chu_Cai_Cuoi();
         }
-        string So_MAHS(){
+        int Tuoi(){
+            return Con_Nguoi::Tuoi();
+        }
+        int GT(){
+            return Con_Nguoi::GT();
+        }
+        string MaHs(){
             return MAHS;
+        }
+        string Ten(){
+            return Con_Nguoi::Ten();
         }
         void NhapThongTin(){
             Con_Nguoi::NhapThongTin();
@@ -90,16 +95,7 @@ class Tre_Em : public Con_Nguoi{
         }
         void XuatThongTin(){
             Con_Nguoi::XuatThongTin();
-            cout << left << setw(7) << "MAHS: ";   cout <<left << setw(20) << MAHS << endl;
-        }
-        // FIXME: loi ko sync dc file
-        void Sao_Luu_Thong_Tin(){
-            Sao_Luu_Thong_Tin_Tre_Em();
-
-            fileOut.open("DSTE.txt",ios_base::app);
-            fileOut << MAHS << endl << endl;
-
-            fileOut.close();
+            cout << left << setw(6) << "MAHS: ";   cout <<left << setw(20) << MAHS << endl;
         }
 };
 
@@ -178,37 +174,38 @@ void Xuat_Thong_Tin_Tre_Em(List_Tre_Em *mylist){
         i->Data->XuatThongTin();
 }
 
-int Tim_Kiem_Thong_Tin_Nguoi_Lon(List_Nguoi_Lon *mylist){
+int Tim_Kiem_Thong_Tin_Nguoi_Lon_Theo_CMND(List_Nguoi_Lon *mylist){
     string CMND;
-    cout<< "Nhap CMND Tim kiem: "; getline(cin, CMND);
+    cout<< "Nhap CMND: "; getline(cin, CMND);
 
     int count = 1;
     for (List_Nguoi_Lon *i = mylist->Next; i != nullptr; i = i->Next)
-        if (i->Data->So_CMND() == CMND)
+        if (i->Data->cmnd() == CMND)
             return count;
         else count++;
 }
-int Tim_Kiem_Thong_Tin_Tre_Em(List_Tre_Em *mylist){
+int Tim_Kiem_Thong_Tin_Tre_Em_Theo_Ma_HS(List_Tre_Em *mylist){
     string MAHS;
-    cout<< "Nhap MAHS Tim kiem: "; getline(cin, MAHS);
+    cout<< "Nhap MAHS: "; getline(cin, MAHS);
 
     int count = 1;
     for (List_Tre_Em *i = mylist->Next; i != nullptr; i = i->Next)
-        if (i->Data->So_MAHS() == MAHS)
+        if (i->Data->MaHs() == MAHS)
             return count;
         else count++;
 }
 
-void Xuat_Tim_Kiem_Thong_Tin_Nguoi_Lon(List_Nguoi_Lon *mylist){
-    int count = Tim_Kiem_Thong_Tin_Nguoi_Lon(mylist);
+
+void Xuat_Tim_Kiem_Thong_Tin_Nguoi_Lon_Theo_CMND(List_Nguoi_Lon *mylist){
+    int count = Tim_Kiem_Thong_Tin_Nguoi_Lon_Theo_CMND(mylist);
 
     List_Nguoi_Lon *tmp = mylist;
     for (int i=0; i < count; ++i)
         tmp = tmp->Next;
     tmp->Data->XuatThongTin();
 }
-void Xuat_Tim_Kiem_Thong_Tin_Tre_Em(List_Tre_Em *mylist){
-    int count = Tim_Kiem_Thong_Tin_Tre_Em(mylist);
+void Xuat_Tim_Kiem_Thong_Tin_Tre_Em_Theo_Ma_HS(List_Tre_Em *mylist){
+    int count = Tim_Kiem_Thong_Tin_Tre_Em_Theo_Ma_HS(mylist);
 
     List_Tre_Em *tmp = mylist;
     for (int i=0; i < count; ++i)
@@ -218,7 +215,7 @@ void Xuat_Tim_Kiem_Thong_Tin_Tre_Em(List_Tre_Em *mylist){
 }
 
 void Cap_Nhat_Thong_Tin_Nguoi_Lon(List_Nguoi_Lon *mylist){
-    int count = Tim_Kiem_Thong_Tin_Nguoi_Lon(mylist);
+    int count = Tim_Kiem_Thong_Tin_Nguoi_Lon_Theo_CMND(mylist);
 
     List_Nguoi_Lon *tmp = mylist;
     for (int i=0; i < count; ++i)
@@ -226,7 +223,7 @@ void Cap_Nhat_Thong_Tin_Nguoi_Lon(List_Nguoi_Lon *mylist){
     tmp->Data->NhapThongTin();
 }
 void Cap_Nhat_Thong_Tin_Tre_Em(List_Tre_Em *mylist){
-    int count = Tim_Kiem_Thong_Tin_Tre_Em(mylist);
+    int count = Tim_Kiem_Thong_Tin_Tre_Em_Theo_Ma_HS(mylist);
 
     List_Tre_Em *tmp = mylist;
     for (int i=0; i < count; ++i)
@@ -235,7 +232,7 @@ void Cap_Nhat_Thong_Tin_Tre_Em(List_Tre_Em *mylist){
 }
 
 void Xoa_Thong_Tin_Nguoi_Lon(List_Nguoi_Lon *mylist){
-    int count = Tim_Kiem_Thong_Tin_Nguoi_Lon(mylist);
+    int count = Tim_Kiem_Thong_Tin_Nguoi_Lon_Theo_CMND(mylist);
 
     List_Nguoi_Lon *tmp = mylist;
     List_Nguoi_Lon *index = mylist;
@@ -248,7 +245,7 @@ void Xoa_Thong_Tin_Nguoi_Lon(List_Nguoi_Lon *mylist){
     tmp->Next = index->Next;
 }
 void Xoa_Thong_Tin_Tre_Em(List_Tre_Em *mylist){
-    int count = Tim_Kiem_Thong_Tin_Tre_Em(mylist);
+    int count = Tim_Kiem_Thong_Tin_Tre_Em_Theo_Ma_HS(mylist);
 
     List_Tre_Em *tmp = mylist;
     List_Tre_Em *index = mylist;
@@ -286,21 +283,64 @@ class Doc_Gia{
         void Xoa_Toan_Bo_Thong_Tin_Tre_Em(){
             dste->Next = nullptr;
         }
-        // FIXME: CHUC NANG 2
+        // TODO: In such cases, more efficient sorting algorithms 
+        // like merge sort and quick sort should be used.
         void Sap_Xep_Theo_Ten_Nguoi_Lon(){
-            for (List_Nguoi_Lon *i = dsnl->Next; i != nullptr; i = i->Next)
-                for (List_Nguoi_Lon *j=i->Next; j != nullptr; j = j->Next)
-                    if (i->Data->Chu_Cai_Cuoi() > j->Data->Chu_Cai_Cuoi())
+            for (List_Nguoi_Lon *i = dsnl->Next; i != nullptr; i = i->Next){
+                int min = i->Data->Chu_Cai_Cuoi();
+                
+                for (List_Nguoi_Lon *j= i->Next; j != nullptr; j = j->Next)
+                    if (min > j->Data->Chu_Cai_Cuoi())
                         swap(i->Data, j->Data);
+            }
         }
         void Sap_Xep_Theo_Ten_Tre_Em(){
-            for (List_Tre_Em *i = dste->Next; i != nullptr; i = i->Next)
-                for (List_Tre_Em *j=i->Next; j != nullptr; j = j->Next)
-                    if (i->Data->Chu_Cai_Cuoi() > j->Data->Chu_Cai_Cuoi())
+            for (List_Tre_Em *i = dste->Next; i != nullptr; i = i->Next){
+                int min = i->Data->Chu_Cai_Cuoi();
+                
+                for (List_Tre_Em *j= i->Next; j != nullptr; j = j->Next)
+                    if (min > j->Data->Chu_Cai_Cuoi())
                         swap(i->Data, j->Data);
+            }
         }
-        
-        // -----
+        void Sap_Xep_Theo_Gioi_Tinh_Nguoi_Lon(){
+            for (List_Nguoi_Lon *i = dsnl->Next; i != nullptr; i = i->Next){
+                int min = i->Data->GT();
+                
+                for (List_Nguoi_Lon *j= i->Next; j != nullptr; j = j->Next)
+                    if (min < j->Data->GT())
+                        swap(i->Data, j->Data);
+            }  
+        }
+        void Sap_Xep_Theo_Gioi_Tinh_Tre_Em(){
+            for (List_Tre_Em *i = dste->Next; i != nullptr; i = i->Next){
+                int min = i->Data->GT();
+                
+                for (List_Tre_Em *j= i->Next; j != nullptr; j = j->Next)
+                    if (min < j->Data->GT())
+                        swap(i->Data, j->Data);
+            }  
+        }
+        void Sap_Xep_Theo_Tuoi_Nguoi_Lon(){
+            for (List_Nguoi_Lon *i = dsnl->Next; i != nullptr; i = i->Next){
+                int min = i->Data->Tuoi();
+                
+                for (List_Nguoi_Lon *j= i->Next; j != nullptr; j = j->Next)
+                    if (min > j->Data->Tuoi())
+                        swap(i->Data, j->Data);
+            }
+        }
+        void Sap_Xep_Theo_Tuoi_Tre_Em(){
+            for (List_Tre_Em *i = dste->Next; i != nullptr; i = i->Next){
+                int min = i->Data->Tuoi();
+                
+                for (List_Tre_Em *j= i->Next; j != nullptr; j = j->Next)
+                    if (min > j->Data->Tuoi())
+                        swap(i->Data, j->Data);
+            }
+        }
+        // ----
+
         // CHUC NANG 3
         void Cap_Nhat_Thong_Tin_Cho_Nguoi_Lon(){
             Cap_Nhat_Thong_Tin_Nguoi_Lon(dsnl);
@@ -309,20 +349,71 @@ class Doc_Gia{
             Cap_Nhat_Thong_Tin_Tre_Em(dste);
         }
         // CHUC NANG 4
-        void Tim_Kiem_Thong_Tin_Nguoi_Lon(){
-            Xuat_Tim_Kiem_Thong_Tin_Nguoi_Lon(dsnl);
+        void Tim_Kiem_Thong_Tin_Nguoi_Lon_Theo_CMND(){
+            Xuat_Tim_Kiem_Thong_Tin_Nguoi_Lon_Theo_CMND(dsnl);
         }
-        void Tim_Kiem_Thong_Tin_Tre_Em(){
-            Xuat_Tim_Kiem_Thong_Tin_Tre_Em(dste);
+        void Tim_Kiem_Thong_Tin_Tre_Em_Theo_Ma_HS(){
+            Xuat_Tim_Kiem_Thong_Tin_Tre_Em_Theo_Ma_HS(dste);
         }
-        // FIXME: CHUC NANG 5
-        void Sync_Thong_Tin_Nguoi_Lon(){
-            dsnl->Data->Sao_Luu_Thong_Tin();
+        void Tim_Kiem_Thong_Tin_Nguoi_Lon_Theo_GT(){
+            int Sex;
+            cout<< "Nhap GT: "; cin >> Sex;
+
+            for (List_Nguoi_Lon *i = dsnl->Next; i != nullptr; i = i->Next)
+                if (i->Data->GT() == Sex % 2)
+                    i->Data->XuatThongTin();
         }
-        void Sync_Thong_Tin_Tre_Em(){
-            dste->Data->Sao_Luu_Thong_Tin();
+        void Tim_Kiem_Thong_Tin_Tre_Em_Theo_GT(){
+            int Sex;
+            cout<< "Nhap GT: "; cin >> Sex;
+
+            for (List_Tre_Em *i = dste->Next; i != nullptr; i = i->Next)
+                if (i->Data->GT() == Sex % 2)
+                    i->Data->XuatThongTin();
+
         }
-        // --
+        void Tim_Kiem_Thong_Tin_Nguoi_Lon_Theo_Ten(){
+            string Name;
+            cout<< "Nhap Ten: "; getline(cin, Name);
+
+            for (List_Nguoi_Lon *i = dsnl->Next; i != nullptr; i = i->Next)
+                if (i->Data->Ten() == Name)
+                    i->Data->XuatThongTin();
+        }
+        void Tim_Kiem_Thong_Tin_Tre_Em_Theo_Ten(){
+            string Name;
+            cout<< "Nhap Ten: "; getline(cin, Name);
+
+            for (List_Tre_Em *i = dste->Next; i != nullptr; i = i->Next)
+                if (i->Data->Ten() == Name)
+                    i->Data->XuatThongTin();
+        }
+        // CHUC NANG 5
+        void Back_Up_Thong_Tin_Nguoi_Lon(){
+            ofstream fileOut;
+            fileOut.open("DSNL.txt", ios_base::trunc);
+
+            for (List_Nguoi_Lon *i = dsnl->Next; i != nullptr; i = i->Next){
+                fileOut << i->Data->Ten()   << ", ";
+                fileOut << i->Data->GT()    << ", ";
+                fileOut << i->Data->Tuoi()  << ", ";
+                fileOut << i->Data->cmnd()  << ", " << endl;
+            }
+            fileOut.close();
+        }
+        void Back_Up_Thong_Tin_Tre_Em(){
+            ofstream fileOut;
+            fileOut.open("DSTE.txt", ios_base::trunc);
+
+            for (List_Tre_Em *i = dste->Next; i != nullptr; i = i->Next){
+                fileOut << left << setw(25) << i->Data->Ten()   << ",";
+                fileOut << left << setw(3)  << i->Data->GT()    << ", ";
+                fileOut << left << setw(5)  << i->Data->Tuoi()  << ", ";
+                fileOut << left << setw(20) << i->Data->MaHs()  << ", " << endl;
+            }
+            fileOut.close();
+        }
+
         // CHUC NANG 6
         void Xuat_Thong_Tin_Doc_Gia_Tre_Em(){
             Xuat_Thong_Tin_Tre_Em(dste);
@@ -356,7 +447,9 @@ void Chuc_Nang_3(Doc_Gia *mycustomer);
 void Menu_Chuc_Nang_4();
 void Chuc_Nang_4(Doc_Gia *mycustomer);
 
-void Menu_Chuc_Nang_5();
+void Menu_Chuc_Nang_5_Basic();
+void Chuc_Nang_5_Khoi_Phuc(Doc_Gia *mycustomer);
+void Chuc_Nang_5_Sao_Luu(Doc_Gia *mycustomer);
 void Chuc_Nang_5(Doc_Gia *mycustomer);
 
 void Menu_Chuc_Nang_6();
@@ -387,7 +480,6 @@ void Menu_Chinh(){
 void Chuc_Nang_Chinh(Doc_Gia *mycustomer){
     do{
         Menu_Chinh();
-        // TODO: THIEU CHUC NANG sync (5), sort by sex, age (2)
         switch (choice){
         case 1:
             Chuc_Nang_1(mycustomer);
@@ -446,7 +538,7 @@ void Chuc_Nang_1(Doc_Gia *mycustomer){
                 mycustomer->Xoa_Thong_Tin_Cho_Tre_Em();
                 break;
             case 5:
-                mycustomer->Xoa_Thong_Tin_Cho_Nguoi_Lon();
+                mycustomer->Xoa_Toan_Bo_Thong_Tin_Nguoi_Lon();
                 break;
             case 6:
                 mycustomer->Xoa_Toan_Bo_Thong_Tin_Tre_Em();
@@ -469,7 +561,6 @@ void Menu_Chuc_Nang_2_Basic(){
     cout << "Lua chon: "; cin>> choice;
     cin.ignore();
 }
-// TODO: UP LAI CHUC NANG 2
 void Menu_Chuc_Nang_2_Tre_Em(Doc_Gia *mycustomer){
     system("cls");
     cout << internal << setw(18)<< "----CHUC NANG 2-----" << endl;
@@ -485,7 +576,12 @@ void Menu_Chuc_Nang_2_Tre_Em(Doc_Gia *mycustomer){
     case 1:
         mycustomer->Sap_Xep_Theo_Ten_Tre_Em();
         break;
-    
+    case 2:
+        mycustomer->Sap_Xep_Theo_Gioi_Tinh_Tre_Em();
+        break;
+    case 3:
+        mycustomer->Sap_Xep_Theo_Tuoi_Tre_Em();
+        break;
     case 0:
         break;
     }
@@ -505,7 +601,12 @@ void Menu_Chuc_Nang_2_Nguoi_Lon(Doc_Gia *mycustomer){
     case 1:
         mycustomer->Sap_Xep_Theo_Ten_Nguoi_Lon();
         break;
-    // TODO: UPDATE THEM
+    case 2:
+        mycustomer->Sap_Xep_Theo_Gioi_Tinh_Nguoi_Lon();
+        break;
+    case 3:
+        mycustomer->Sap_Xep_Theo_Tuoi_Nguoi_Lon();
+        break;
     case 0:
         break;
     }
@@ -517,7 +618,6 @@ void Chuc_Nang_2(Doc_Gia *mycustomer){
         switch (choice){
         case 1:
             Menu_Chuc_Nang_2_Nguoi_Lon(mycustomer);
-
             break;
         case 2:
             Menu_Chuc_Nang_2_Tre_Em(mycustomer);
@@ -557,21 +657,21 @@ void Chuc_Nang_3(Doc_Gia *mycustomer){
         case 0: 
             break;
         }
-        if (choice !=0)
-            system("pause");
-        else
-            break;
     } while (choice != 0);
 }
 
 void Menu_Chuc_Nang_4(){
     system("cls");
     cout << internal << setw(18)<< "----CHUC NANG 4-----" << endl;
-    cout << "1. Tim kiem nguoilon"<< endl;
-    cout << "2. Tim kiem tre em"  << endl;
+    cout << "1. Tim kiem nguoilon   (CMND)"<< endl;
+    cout << "2. Tim kiem nguoilon   (GT)"  << endl;
+    cout << "3. Tim kiem nguoilon   (Ten)" << endl;
+    cout << "4. Tim kiem tre em     (MAHS)"<< endl;
+    cout << "5. Tim kiem tre em     (GT)"  << endl;
+    cout << "6. Tim kiem tre em     (Ten)" << endl;
     // cout << "3. Tim kiem tat ca"  << endl;
-    cout << "0. Exit"                   << endl;   
-    cout << "---------------------"     << endl;
+    cout << "0. Exit"                      << endl;   
+    cout << "---------------------"        << endl;
     cout << "Lua chon: "; cin>> choice;
     cin.ignore();
 }
@@ -581,11 +681,22 @@ void Chuc_Nang_4(Doc_Gia *mycustomer){
 
         switch (choice){
         case 1:
-            mycustomer->Tim_Kiem_Thong_Tin_Nguoi_Lon();
+            mycustomer->Tim_Kiem_Thong_Tin_Nguoi_Lon_Theo_CMND();
             break;
-        
         case 2:
-            mycustomer->Tim_Kiem_Thong_Tin_Tre_Em();
+            mycustomer->Tim_Kiem_Thong_Tin_Nguoi_Lon_Theo_GT();
+            break;
+        case 3:
+            mycustomer->Tim_Kiem_Thong_Tin_Nguoi_Lon_Theo_Ten();
+            break;
+        case 4:
+            mycustomer->Tim_Kiem_Thong_Tin_Tre_Em_Theo_Ma_HS();
+            break;
+        case 5:
+            mycustomer->Tim_Kiem_Thong_Tin_Tre_Em_Theo_GT();
+            break;
+        case 6:
+            mycustomer->Tim_Kiem_Thong_Tin_Tre_Em_Theo_Ten();
             break;
         case 0: 
             break;
@@ -597,45 +708,73 @@ void Chuc_Nang_4(Doc_Gia *mycustomer){
     } while (choice != 0);
 }
 
-void Menu_Chuc_Nang_5(){
+
+void Menu_Chuc_Nang_5_Basic(){
     system("cls");
     cout << internal << setw(18)<< "----CHUC NANG 5-----" << endl;
-    cout << "1. Sao luu nguoilon"<< endl;
-    cout << "2. Sao luu tre em"  << endl;
-    cout << "3. Sao luu tat ca"  << endl;
-    cout << "4. Khoi phuc nguoilon"<< endl;
-    cout << "5. Khoi phuc tre em"  << endl;
-    cout << "6. Khoi phuc tat ca"  << endl;
+    cout << "1. Sao luu thong tin"      << endl;
+    cout << "2. Khoi phuc thong tin (DAG)"  << endl;
+    // cout << "3. Doi tuong tat ca"  << endl;
     cout << "0. Exit"                   << endl;   
     cout << "---------------------"     << endl;
     cout << "Lua chon: "; cin>> choice;
     cin.ignore();
 }
-void Chuc_Nang_5(Doc_Gia *mycustomer){
-    do{
-    Menu_Chuc_Nang_5();
-
+void Chuc_Nang_5_Sao_Luu(Doc_Gia *mycustomer){
+    system("cls");
+    cout << internal << setw(18)<< "----CHUC NANG 5-----" << endl;
+    cout << "1. Sao luu nguoilon"   << endl;
+    cout << "2. Sao luu tre em"     << endl;
+    cout << "3. Sao luu tat ca"     << endl;
+    cout << "0. Exit"               << endl;   
+    cout << "------BAO TRI-------"  << endl;
+    cout << "Lua chon: "; cin>> choice;
+    cin.ignore();
+    
     switch (choice){
     case 1:
-        mycustomer->Sync_Thong_Tin_Nguoi_Lon();
+        mycustomer->Back_Up_Thong_Tin_Nguoi_Lon();
         break;
     case 2:
-        mycustomer->Sync_Thong_Tin_Tre_Em();
+        mycustomer->Back_Up_Thong_Tin_Tre_Em();
         break;
     case 3:
-        mycustomer->Sync_Thong_Tin_Nguoi_Lon();
-        mycustomer->Sync_Thong_Tin_Tre_Em();
+        mycustomer->Back_Up_Thong_Tin_Nguoi_Lon();
+        mycustomer->Back_Up_Thong_Tin_Tre_Em();
         break;
-    case 0: 
+    case 0:
         break;
     }
-    if (choice !=0)
-        system("pause");
-    else
-        break;
+}
+void Chuc_Nang_5_Khoi_Phuc(Doc_Gia *mycustomer){
+    system("cls");
+    cout << internal << setw(18)<< "----CHUC NANG 5-----" << endl;
+    cout << "1. Khoi phuc nguoilon"<< endl;
+    cout << "2. Khoi phuc tre em"  << endl;
+    cout << "3. Khoi phuc tat ca"  << endl;
+    cout << "0. Exit"              << endl;   
+    cout << "------BAO TRI-------" << endl;
+    cout << "Lua chon: "; cin>> choice;
+    cin.ignore();
+    // TODO: UPDATE Chuc nang backup & sync
+}
+void Chuc_Nang_5(Doc_Gia *mycustomer){
+    do{
+    Menu_Chuc_Nang_5_Basic();
+
+        switch (choice){
+        case 1:
+            Chuc_Nang_5_Sao_Luu(mycustomer);
+            break;
+        case 2:
+            Chuc_Nang_5_Khoi_Phuc(mycustomer);
+            break;
+        case 0: 
+            break;
+        }
     } while (choice != 0);
 }
-// ---------------------
+
 
 void Menu_Chuc_Nang_6(){
     system("cls");
@@ -680,7 +819,9 @@ void Chuc_Nang_6(Doc_Gia *mycustomer){
                 cout << right << setw(40)<< "------DS TRE EM------" << endl;
                 mycustomer->Xuat_Thong_Tin_Doc_Gia_Tre_Em();
 
-                cout << right << setw(35)<< "So luong " << (count = mycustomer->So_Luong_Nguoi_Lon() + mycustomer->So_Luong_Tre_Em());
+                cout << endl;
+                cout << right << setw(34)<< "So luong ";
+                cout << (count = mycustomer->So_Luong_Nguoi_Lon() + mycustomer->So_Luong_Tre_Em());
                 cout << endl;
             }
         }
